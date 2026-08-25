@@ -16,7 +16,7 @@ export const nav: DefaultTheme.Config['nav'] = [
       },
       {
         text: 'Reverse',
-        link: '/newbie/reverse/Introduction/Introduction'
+        link: '/newbie/reverse/FAQ/FAQ'
       },
       {
         text: '3Dmigoto',
