@@ -152,6 +152,14 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         },
         {
           text: '所有权', link: '/developer/rust/所有权/所有权.md'
+        },
+        {
+          text: '结构体与枚举',
+          // link: '/developer/rust/结构体与枚举/结构体与枚举.md',
+          items: [
+            {text: '结构体', link: '/developer/rust/结构体与枚举/结构体.md' },
+            {text: '枚举', link: '/developer/rust/结构体与枚举/枚举.md' }
+          ]
         }
       ]
     }
