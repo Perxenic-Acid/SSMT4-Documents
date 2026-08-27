@@ -1,3 +1,6 @@
+let animationId: number | null = null
+let resizeHandler: (() => void) | null = null
+let activeCanvas: HTMLCanvasElement | null = null
 
 export function initMeteorEffect() {
   if (typeof window === 'undefined') return
@@ -15,9 +18,14 @@ export function initMeteorEffect() {
   canvas.style.zIndex = '-1' 
   canvas.style.pointerEvents = 'none'
   document.body.appendChild(canvas)
+  activeCanvas = canvas
 
   const ctx = canvas.getContext('2d')
-  if (!ctx) return
+  if (!ctx) {
+    canvas.remove()
+    activeCanvas = null
+    return
+  }
 
   let width = window.innerWidth
   let height = window.innerHeight
@@ -29,27 +37,47 @@ export function initMeteorEffect() {
     canvas.height = height
   }
   window.addEventListener('resize', resize)
+  resizeHandler = resize
   resize()
 
-  // 浪漫粉色调 + 彩虹色
+  // Full theme palette, weighted toward readable glow colors.
   const colors = [
-    '#FFB6C1', // LightPink
-    '#FF69B4', // HotPink
-    '#FF1493', // DeepPink
-    '#DB7093', // PaleVioletRed
-    '#C71585', // MediumVioletRed
-    '#DA70D6', // Orchid
-    '#D8BFD8', // Thistle
-    '#DDA0DD', // Plum
-    '#EE82EE', // Violet
-    '#FF00FF', // Magenta
-    '#9370DB', // MediumPurple
-    '#8A2BE2', // BlueViolet
-    // 少量彩虹点缀
-    '#00FFFF', // Cyan
-    '#7FFFD4', // Aquamarine
-    '#FFD700', // Gold
+    '#6ECC54',
+    '#D34947',
+    '#018B8D',
+    '#002FA7',
+    '#470125',
+    '#F9D46C',
+    '#71E2D1',
+    '#C8161D',
+    '#492D22',
+    '#EB5C20',
+    '#0D3A69',
   ]
+
+  const parseHexColor = (hex: string) => {
+    const value = Number.parseInt(hex.slice(1), 16)
+    return {
+      r: (value >> 16) & 255,
+      g: (value >> 8) & 255,
+      b: value & 255,
+    }
+  }
+
+  const palette = colors.map(parseHexColor)
+
+  const mixPaletteColor = (position: number) => {
+    const wrapped = ((position % palette.length) + palette.length) % palette.length
+    const currentIndex = Math.floor(wrapped)
+    const nextIndex = (currentIndex + 1) % palette.length
+    const mix = wrapped - currentIndex
+    const current = palette[currentIndex]
+    const next = palette[nextIndex]
+    const r = Math.round(current.r + (next.r - current.r) * mix)
+    const g = Math.round(current.g + (next.g - current.g) * mix)
+    const b = Math.round(current.b + (next.b - current.b) * mix)
+    return `rgb(${r}, ${g}, ${b})`
+  }
 
   // 预计算星星顶点
   const STAR_VERTICES: {x: number, y: number}[] = []
@@ -85,17 +113,17 @@ export function initMeteorEffect() {
       this.alpha = alpha
       this.baseAlpha = alpha
       this.rotation = Math.random() * Math.PI * 2
-      this.rotationSpeed = (Math.random() - 0.5) * 0.2 // 自转速度
+      this.rotationSpeed = (Math.random() - 0.5) * 0.035 // 自转速度
       this.pulsePhase = Math.random() * Math.PI * 2
-      this.pulseSpeed = 0.05 + Math.random() * 0.05 // 呼吸速度
-      this.colorSpeed = 1 + Math.random() * 2 // 颜色变化速度
+      this.pulseSpeed = 0.008 + Math.random() * 0.012 // 呼吸速度
+      this.colorSpeed = 0.004 + Math.random() * 0.006 // 颜色变化速度
     }
 
     update() {
       this.rotation += this.rotationSpeed
       this.pulsePhase += this.pulseSpeed
-      this.hue += this.colorSpeed // 颜色不断变化
-      if (this.hue > 360) this.hue -= 360
+      this.hue += this.colorSpeed // 缓慢连续变色
+      if (this.hue > palette.length) this.hue -= palette.length
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -103,10 +131,9 @@ export function initMeteorEffect() {
       ctx.translate(this.x, this.y)
       ctx.rotate(this.rotation)
       
-      // 呼吸灯效果：透明度和发光强度随时间波动
+      // 呼吸灯效果：透明度和发光强度随时间缓慢波动
       const pulse = (Math.sin(this.pulsePhase) + 1) / 2 // 0 到 1
-      // 增强呼吸幅度：透明度在 0.2 到 1.0 之间剧烈波动
-      const currentAlpha = this.alpha * (0.2 + 0.8 * pulse) 
+      const currentAlpha = this.alpha * (0.72 + 0.28 * pulse)
       
       ctx.beginPath()
       // 优化：使用预计算顶点
@@ -116,14 +143,12 @@ export function initMeteorEffect() {
       }
       ctx.closePath()
       
-      // 使用 HSL 实现彩虹色变化
-      const color = `hsl(${this.hue}, 80%, 70%)`
+      const color = mixPaletteColor(this.hue)
       
       ctx.fillStyle = color
       ctx.globalAlpha = Math.max(0, currentAlpha)
       
-      // 增强荧光呼吸效果：光晕范围更大，且随呼吸波动
-      ctx.shadowBlur = this.size * 3 * (0.5 + 1.5 * pulse) // 光晕范围 1.5x 到 6x
+      ctx.shadowBlur = this.size * (1.8 + 0.8 * pulse)
       ctx.shadowColor = color
       ctx.fill()
       
@@ -160,7 +185,7 @@ export function initMeteorEffect() {
       
       this.size = 8 + Math.random() * 8
       // 初始颜色随机，偏向粉色/紫色 (300度左右)，但也允许其他颜色
-      this.hue = Math.random() * 360
+      this.hue = Math.random() * colors.length
       
       // 头部星星
       this.head = new Star(this.x, this.y, this.size, this.hue, 1)
@@ -169,6 +194,7 @@ export function initMeteorEffect() {
     update() {
       this.x += this.vx
       this.y += this.vy
+      const outOfBounds = this.y > height + 100 || this.x < -100
       
       // 更新头部位置和状态
       this.head.x = this.x
@@ -177,7 +203,7 @@ export function initMeteorEffect() {
       this.hue = this.head.hue // 同步颜色
 
       // 产生尾巴小星星
-      if (Math.random() < 0.7) { 
+      if (!outOfBounds && Math.random() < 0.7) {
         const trailStar = new Star(
           this.x, 
           this.y, 
@@ -186,7 +212,7 @@ export function initMeteorEffect() {
           0.6 // 初始透明度
         )
         // 尾巴星星也有轻微的自转
-        trailStar.rotationSpeed = (Math.random() - 0.5) * 0.1
+        trailStar.rotationSpeed = (Math.random() - 0.5) * 0.025
         this.trail.push(trailStar)
       }
 
@@ -204,7 +230,7 @@ export function initMeteorEffect() {
       }
 
       // 检查边界
-      if (this.y > height + 100 || this.x < -100) {
+      if (outOfBounds) {
         if (this.trail.length === 0) {
             this.dead = true
         }
@@ -222,12 +248,10 @@ export function initMeteorEffect() {
 
   const meteors: Meteor[] = []
 
-  let animationId: number | null = null
-
   function animate() {
     if (!ctx) return
     // Safety check: stop if canvas is removed from DOM
-    if (!document.body.contains(canvas)) return
+    if (!document.body.contains(canvas) || activeCanvas !== canvas) return
 
     ctx.clearRect(0, 0, width, height)
     
@@ -251,8 +275,6 @@ export function initMeteorEffect() {
   animate()
 }
 
-let animationId: number | null = null
-
 export function stopMeteorEffect() {
   if (typeof window === 'undefined') return
   
@@ -261,9 +283,15 @@ export function stopMeteorEffect() {
     animationId = null
   }
 
+  if (resizeHandler) {
+    window.removeEventListener('resize', resizeHandler)
+    resizeHandler = null
+  }
+
   const canvas = document.getElementById('meteor-canvas')
   if (canvas) {
     canvas.remove()
   }
+  activeCanvas = null
 }
 

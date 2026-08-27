@@ -1,19 +1,97 @@
 :root {
     --vp-font-family-mono: "JetBrains Mono", "Sarasa Mono SC", monospace;
+
+    --ssmt-lime: #6ECC54;
+    --ssmt-titian: #D34947;
+    --ssmt-mars: #018B8D;
+    --ssmt-klein: #002FA7;
+    --ssmt-burgundy: #470125;
+    --ssmt-schonbrunn: #F9D46C;
+    --ssmt-tiffany: #71E2D1;
+    --ssmt-china-red: #C8161D;
+    --ssmt-van-dyke: #492D22;
+    --ssmt-hermes: #EB5C20;
+    --ssmt-prussian: #0D3A69;
+
+    --ssmt-accent: var(--ssmt-hermes);
+    --ssmt-accent-2: var(--ssmt-titian);
+    --ssmt-accent-3: var(--ssmt-schonbrunn);
+    --ssmt-success: var(--ssmt-lime);
+    --ssmt-info: var(--ssmt-klein);
+    --ssmt-info-soft: var(--ssmt-tiffany);
+    --ssmt-tech: var(--ssmt-mars);
+    --ssmt-danger: var(--ssmt-china-red);
+    --ssmt-warning: var(--ssmt-titian);
+    --ssmt-warm: var(--ssmt-schonbrunn);
+    --ssmt-ink: var(--ssmt-van-dyke);
+    --ssmt-deep: var(--ssmt-prussian);
+    --ssmt-border: rgba(235, 92, 32, 0.22);
+    --ssmt-shadow: rgba(73, 45, 34, 0.14);
+    --ssmt-glow: rgba(249, 212, 108, 0.3);
+
+    --vp-c-brand-1: var(--ssmt-hermes);
+    --vp-c-brand-2: var(--ssmt-china-red);
+    --vp-c-brand-3: var(--ssmt-schonbrunn);
+    --vp-c-brand-soft: rgba(235, 92, 32, 0.14);
+}
+
+.dark {
+    --ssmt-accent: var(--ssmt-schonbrunn);
+    --ssmt-accent-2: var(--ssmt-hermes);
+    --ssmt-accent-3: var(--ssmt-tiffany);
+    --ssmt-info: var(--ssmt-tiffany);
+    --ssmt-info-soft: var(--ssmt-mars);
+    --ssmt-tech: var(--ssmt-tiffany);
+    --ssmt-ink: var(--ssmt-schonbrunn);
+    --ssmt-deep: var(--ssmt-prussian);
+    --ssmt-border: rgba(249, 212, 108, 0.24);
+    --ssmt-shadow: rgba(13, 58, 105, 0.3);
+    --ssmt-glow: rgba(113, 226, 209, 0.24);
+
+    --vp-c-brand-1: var(--ssmt-schonbrunn);
+    --vp-c-brand-2: var(--ssmt-hermes);
+    --vp-c-brand-3: var(--ssmt-titian);
+    --vp-c-brand-soft: rgba(249, 212, 108, 0.16);
 }
 
 /* ===== 导航栏下拉卡片美化 ===== */
 /* 直接复用翻译组件下拉菜单的样式 */
+@media (min-width: 960px) {
+    .VPNavBar.has-sidebar .wrapper {
+        padding: 0 32px !important;
+    }
+
+    .VPNavBar.has-sidebar .container {
+        max-width: calc(var(--vp-layout-max-width) - 64px) !important;
+    }
+
+    .VPNavBar.has-sidebar .container > .title {
+        position: static !important;
+        padding: 0 !important;
+        width: auto !important;
+        height: calc(var(--vp-nav-height) - 1px) !important;
+    }
+
+    .VPNavBar.has-sidebar .content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .VPNavBar.has-sidebar .VPNavBarSearch {
+        padding-left: 24px;
+    }
+}
+
 .VPMenu {
     background-color: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(32px) !important;
     -webkit-backdrop-filter: blur(32px) !important;
-    border: 1px solid rgba(255, 0, 128, 0.2) !important;
+    border: 1px solid rgba(235, 92, 32, 0.22) !important;
     border-radius: 10px !important;
     padding: 5px !important;
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.06),
-        0 12px 36px rgba(255, 0, 128, 0.1) !important;
+        0 12px 36px rgba(73, 45, 34, 0.1) !important;
     overflow: hidden;
     animation: menuFadeIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -22,7 +100,7 @@
     background-color: rgba(11, 12, 21, 0.95) !important;
     backdrop-filter: blur(32px) !important;
     -webkit-backdrop-filter: blur(32px) !important;
-    border-color: rgba(255, 0, 128, 0.3) !important;
+    border-color: rgba(249, 212, 108, 0.28) !important;
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.2),
         0 12px 36px rgba(0, 0, 0, 0.3) !important;
@@ -40,7 +118,7 @@
     font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: color-mix(in srgb, #ff0080 70%, var(--vp-c-text-1)) !important;
+    color: color-mix(in srgb, var(--ssmt-hermes) 72%, var(--vp-c-text-1)) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     margin: 0 0 3px;
 }
@@ -65,13 +143,13 @@
 }
 
 .VPMenu .VPMenuLink a:hover {
-    background-color: rgba(255, 0, 128, 0.1) !important;
-    color: #ff0080 !important;
+    background-color: rgba(249, 212, 108, 0.14) !important;
+    color: var(--ssmt-burgundy) !important;
     padding-left: 16px !important;
 }
 
 .dark .VPMenu .VPMenuLink a:hover {
-    background-color: rgba(255, 0, 128, 0.15) !important;
+    background-color: rgba(235, 92, 32, 0.16) !important;
 }
 
 .VPMenu .VPMenuGroup .VPMenuLink {
@@ -113,32 +191,32 @@ pre,
     text-decoration: none;
 } /* 十六进制数字 —— 清爽青蓝色，类似常量/数字 */
 .hex-byte {
-    color: #9cdcfe; /* VS Code 数字蓝 */
+    color: var(--ssmt-klein); /* 数值/字节，使用克莱因蓝 */
 } /* x86 操作码(opcode) 醒目的暖金色 —— 一眼定位指令起点 */
 .x86-opcode {
-    color: #ffd700; /* 金，亮眼但不刺 */
+    color: var(--ssmt-schonbrunn); /* 金，亮眼但不刺 */
     font-weight: 500;
 } /* ModRM + SIB 字节 —— 典藏青绿，表示寻址模式 */
 .x86-modrm {
-    color: #4ec9b0; /* 绿松石，明显区别于操作码 */
+    color: var(--ssmt-mars); /* 寻址模式，使用马尔斯绿 */
 } /* 位移/立即数 —— 亮橘红，突出常数 */
 .x86-imm {
-    color: #f08d49; /* 珊瑚橘 */
+    color: var(--ssmt-hermes); /* 珊瑚橘 */
 } /* 指针/重定位/节名称标记 —— 紫罗兰，象征元数据 */
 .section-tag {
-    color: #c586c0; /* 紫，用于 .text .data 等 */
+    color: var(--ssmt-titian); /* 紫，用于 .text .data 等 */
 } /* ASCII 释义区（竖线右侧） —— 保留原有的低饱和绿灰 */
 .ascii-art {
-    color: #6a9955; /* 注释绿，柔和 */
+    color: var(--ssmt-lime); /* 注释/释义，柔和绿色 */
 } /* 完全保留原有空白、缩进、管道符风格 */
 .hex-sep {
-    color: #808080; /* 分隔符灰 */
+    color: color-mix(in srgb, var(--ssmt-van-dyke) 54%, var(--vp-c-text-2)); /* 分隔符，低饱和暖棕 */
 } /* 偏移量地址区 —— 茶色，稳重 */
 .offset-addr {
-    color: #b5cea8; /* 浅翠绿 */
+    color: var(--ssmt-tiffany); /* 地址偏移，清晰浅青 */
 } /* 自定义高亮：PE头特征、调用约定标记等 —— 柔红点缀 */
 .pe-magic {
-    color: #ff7b72; /* 浅珊瑚红 */
+    color: var(--ssmt-titian); /* 浅珊瑚红 */
 } /* 纯文本降级 —— 不加任何额外背景 */
 .plain-hex {
     color: #d4d4d4;
@@ -146,7 +224,7 @@ pre,
 
 .lemma-box {
     background: var(--vp-c-bg-soft);
-    border-left: 6px solid #9c27b0;
+    border-left: 6px solid var(--ssmt-van-dyke);
     border-radius: 12px;
     padding: 18px 22px;
     margin: 1.5em 0;
@@ -156,7 +234,7 @@ pre,
 .lemma-title {
     font-weight: 700;
     font-size: 1.05em;
-    color: #9c27b0;
+    color: var(--ssmt-burgundy);
     margin-bottom: 0.6em;
 }
 

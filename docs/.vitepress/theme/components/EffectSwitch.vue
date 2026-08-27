@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeUnmount, onMounted } from 'vue'
 import { withBase } from 'vitepress'
 import { initMeteorEffect, stopMeteorEffect } from '../meteors'
 import { isEffectsEnabled } from '../themeState'
@@ -83,12 +83,11 @@ const createVideoElement = (src) => {
 
   const video = document.createElement('video')
   video.className = 'bg-video'
-  video.autoplay = true
   video.muted = true
   video.loop = true
   video.preload = 'auto'
   video.playsInline = true
-  
+
   video.style.cssText = `
     position: fixed;
     top: 0;
@@ -107,17 +106,31 @@ const createVideoElement = (src) => {
   document.body.appendChild(video)
   videoElement.value = video
 
-  const tryPlay = () => {
-    video.play().then(() => {
-      video.style.opacity = '0.3'
-      isLoading.value = false
-    }).catch(() => {
-      isLoading.value = false
-    })
+  const showPausedFrame = () => {
+    // Show the video element at its current position (paused) as a static background
+    video.style.opacity = '0.3'
+    isLoading.value = false
   }
 
-  video.addEventListener('loadeddata', tryPlay, { once: true })
-  video.addEventListener('canplay', tryPlay, { once: true })
+  const startPlayback = () => {
+    // Seek to beginning and start normal playback
+    video.currentTime = 0
+    video.play().catch(() => {})
+  }
+
+  video.addEventListener('loadeddata', () => {
+    // Seek to 1s to show a representative paused frame
+    video.currentTime = 1
+    showPausedFrame()
+    // If fully buffered already, start playing immediately
+    if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      startPlayback()
+    }
+  }, { once: true })
+
+  // Fires when the browser has buffered enough data to play through the entire video
+  video.addEventListener('canplaythrough', startPlayback, { once: true })
+
   video.addEventListener('error', () => {
     if (src.endsWith('.webm')) {
       video.pause()
@@ -137,7 +150,11 @@ const createVideoElement = (src) => {
   video.load()
 
   if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-    tryPlay()
+    video.currentTime = 1
+    showPausedFrame()
+  }
+  if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+    startPlayback()
   }
 }
 
@@ -147,94 +164,153 @@ onMounted(() => {
   isLoading.value = true
   enableEffects()
 })
+
+onBeforeUnmount(() => {
+  disableEffects()
+})
 </script>
 
 <template>
-  <div class="video-bg-control">
-    <button 
-      class="video-toggle" 
-      @click="toggleEffects" 
+  <div class="effect-control" :class="{ active: isEffectsEnabled, loading: isLoading }">
+    <button
+      class="effect-switch"
+      @click="toggleEffects"
       :title="isEffectsEnabled ? '关闭视觉特效 (节省性能)' : '开启视觉特效 (消耗性能)'"
       :disabled="isLoading"
+      :aria-pressed="isEffectsEnabled"
     >
-      <div class="icon-container">
-        <span v-if="isLoading">⏳</span>
-        <span v-else-if="isEffectsEnabled">✨</span>
-        <span v-else class="muted">✨</span>
-      </div>
+      <span class="effect-track" aria-hidden="true">
+        <span class="effect-thumb"></span>
+      </span>
+      <span class="effect-label">FX</span>
+      <span class="effect-status">{{ isLoading ? '...' : isEffectsEnabled ? 'ON' : 'OFF' }}</span>
     </button>
   </div>
 </template>
 
 <style scoped>
-.video-bg-control {
+.effect-control {
   display: flex;
   align-items: center;
-  margin-left: 12px;
-  padding-left: 12px;
-  border-left: 1px solid rgba(255, 0, 128, 0.15);
-  height: 24px;
-  transition: border-color 0.3s;
+  margin-left: 8px;
+  height: 28px;
 }
 
-.video-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 3px 6px;
+.effect-switch {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  padding: 3px 8px 3px 4px;
+  border: 1px solid rgba(1, 139, 141, 0.18);
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.68);
+  background-clip: padding-box;
   color: var(--vp-c-text-1);
-  border-radius: 6px;
-  transition: all 0.25s ease;
-  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
-.video-toggle:hover:not(:disabled) {
-  background-color: rgba(255, 0, 128, 0.08);
-  color: #ff0080;
-  transform: scale(1.15);
-  text-shadow: 0 0 6px rgba(255, 0, 128, 0.3);
+.dark .effect-switch {
+  border-color: rgba(113, 226, 209, 0.2);
+  background: rgba(13, 58, 105, 0.18);
 }
 
-.dark .video-toggle:hover:not(:disabled) {
-  background-color: rgba(255, 0, 128, 0.12);
+.effect-switch:hover:not(:disabled),
+.effect-switch:focus-visible {
+  border-color: rgba(1, 139, 141, 0.38);
+  background: rgba(113, 226, 209, 0.12);
 }
 
-.video-toggle:disabled {
+.dark .effect-switch:hover:not(:disabled),
+.dark .effect-switch:focus-visible {
+  border-color: rgba(113, 226, 209, 0.38);
+  background: rgba(113, 226, 209, 0.1);
+}
+
+.effect-switch:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.effect-switch:focus-visible {
+  outline: 2px solid rgba(113, 226, 209, 0.55);
+  outline-offset: 2px;
+}
+
+.effect-switch:disabled {
   cursor: wait;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 
-.icon-container {
-  font-size: 17px;
+.effect-track {
+  position: relative;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 16px;
+  border-radius: 999px !important;
+  background: rgba(200, 22, 29, 0.12);
+  transition: background-color 0.2s ease;
+}
+
+.effect-control.active .effect-track {
+  background: rgba(110, 204, 84, 0.18);
+}
+
+.effect-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50% !important;
+  background: var(--ssmt-danger);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.effect-control.active .effect-thumb {
+  transform: translateX(10px);
+  background: var(--ssmt-success);
+}
+
+.effect-control.loading .effect-thumb {
+  background: var(--ssmt-tech);
+}
+
+.effect-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* 加载中的沙漏动画 */
-.video-toggle:disabled .icon-container {
-  animation: hourglassSpin 1.2s ease-in-out infinite;
+.effect-status {
+  min-width: 18px;
+  color: var(--ssmt-danger);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: right;
 }
 
-@keyframes hourglassSpin {
-  0%, 100% { transform: rotate(0deg); opacity: 0.6; }
-  25% { transform: rotate(90deg); opacity: 1; }
-  50% { transform: rotate(180deg); opacity: 0.6; }
-  75% { transform: rotate(270deg); opacity: 1; }
+.effect-control.active .effect-status {
+  color: var(--ssmt-success);
 }
 
-.muted {
-  opacity: 0.4;
-  filter: grayscale(100%);
-  transition: all 0.3s;
+.effect-control:not(.active) .effect-status {
+  color: var(--ssmt-danger);
+}
+
+.effect-control.loading .effect-status {
+  color: var(--ssmt-info);
 }
 
 @media (max-width: 768px) {
-  .video-bg-control {
+  .effect-control {
     display: none;
   }
 }

@@ -2114,22 +2114,200 @@ html {
 }
 
 
+/* ===== Mobile Nav Screen ===== */
 .VPNavScreen {
-  background-color: rgba(11, 12, 21, 0.95) !important;
-  backdrop-filter: blur(20px) !important;
+  background-color: rgba(255, 252, 249, 0.92) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  height: calc(100vh - var(--vp-nav-height)) !important;
+  padding: 16px 24px !important;
 }
 
-.VPNavScreen .menu-link {
+.dark .VPNavScreen {
+  background-color: rgba(11, 12, 21, 0.92) !important;
+}
+
+.VPNavScreen .container {
+  max-width: 100%;
+}
+
+/* Nav menu link (Home) */
+.VPNavScreen .VPNavScreenMenuLink {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.dark .VPNavScreen .VPNavScreenMenuLink {
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.VPNavScreen .VPNavScreenMenuLink a {
   font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 16px !important;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.VPNavScreen .menu-link:hover {
+.VPNavScreen .VPNavScreenMenuLink a:hover {
   color: #ff0080 !important;
-  padding-left: 20px;
-  background: linear-gradient(90deg, rgba(255, 0, 128, 0.1), transparent);
+  padding-left: 24px !important;
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.08), transparent);
+}
+
+.VPNavScreen .VPNavScreenMenuLink.active a {
+  color: #ff0080 !important;
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.06), transparent);
+  border-left: 3px solid #ff0080;
+}
+
+/* Nav menu group button (expandable sections) */
+.VPNavScreen .VPNavScreenMenuGroup {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.dark .VPNavScreen .VPNavScreenMenuGroup {
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px !important;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--vp-c-text-1);
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .button:hover {
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.08), transparent);
+  color: #ff0080;
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .button-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .button-icon {
+  font-size: 14px;
+  color: #ff0080;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.VPNavScreen .VPNavScreenMenuGroup.open .button-icon {
+  transform: rotate(45deg);
+}
+
+/* Sub-menu items */
+.VPNavScreen .VPNavScreenMenuGroup .items {
+  padding: 2px 0 8px 12px;
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .item {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  margin-left: 8px;
+  padding-left: 4px;
+}
+
+.dark .VPNavScreen .VPNavScreenMenuGroup .item {
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .item a {
+  display: block;
+  padding: 8px 16px !important;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.VPNavScreen .VPNavScreenMenuGroup .item a:hover {
+  color: #ff0080 !important;
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.06), transparent);
+  padding-left: 22px !important;
+  border-left: 2px solid #ff0080;
+  margin-left: -2px;
+}
+
+/* Appearance toggle */
+.VPNavScreen .VPNavScreenAppearance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.dark .VPNavScreen .VPNavScreenAppearance {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.VPNavScreen .VPNavScreenAppearance .text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+}
+
+/* Social links */
+.VPNavScreen .VPNavScreenSocialLinks {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: auto;
+}
+
+.dark .VPNavScreen .VPNavScreenSocialLinks {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.VPNavScreen .VPNavScreenSocialLinks a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--vp-c-text-2);
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.dark .VPNavScreen .VPNavScreenSocialLinks a {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.VPNavScreen .VPNavScreenSocialLinks a:hover {
+  color: #ff0080;
+  background: rgba(255, 0, 128, 0.1);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.2);
 }
 
 

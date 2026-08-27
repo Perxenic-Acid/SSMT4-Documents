@@ -8,6 +8,7 @@ const blockedByPolicy = ref(false)
 const volume = ref(0.3)
 
 const musicSrc = withBase('/Background.ogg')
+const volumePercent = computed(() => `${Math.round(volume.value * 100)}%`)
 
 const buttonTitle = computed(() => {
   if (blockedByPolicy.value) return '浏览器限制自动播放，点击后开始播放'
@@ -71,7 +72,7 @@ onMounted(() => {
     audioEl.value.volume = volume.value
   }
 
-  // Direct src playback uses browser progressive loading (play while buffering).
+  // Direct src playback uses browser progressive loading.
   void playNow()
   window.addEventListener('pointerdown', resumeOnGesture, { once: true })
   window.addEventListener('keydown', resumeOnGesture, { once: true })
@@ -87,22 +88,32 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="music-control" :class="{ blocked: blockedByPolicy }">
-    <button class="music-toggle" :title="buttonTitle" @click="togglePlay">
-      <span class="icon" aria-hidden="true">{{ isPlaying ? '||' : '>' }}</span>
-      <span class="label">BGM</span>
-    </button>
+    <div class="music-shell">
+      <button class="music-toggle" :title="buttonTitle" @click="togglePlay">
+        <span class="play-mark" :class="{ pause: isPlaying }" aria-hidden="true"></span>
+      </button>
 
-    <input
-      class="volume-slider"
-      type="range"
-      min="0"
-      max="1"
-      step="0.01"
-      :value="volume"
-      @input="onVolumeInput"
-      aria-label="背景音乐音量"
-      title="背景音乐音量"
-    />
+      <div class="music-meta">
+        <span class="label">BGM</span>
+        <span class="status" :class="{ on: isPlaying }">{{ isPlaying ? 'ON' : 'OFF' }}</span>
+      </div>
+
+      <div class="volume-control">
+        <span class="volume-mark" aria-hidden="true"></span>
+        <input
+          class="volume-slider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          :value="volume"
+          @input="onVolumeInput"
+          aria-label="背景音乐音量"
+          title="背景音乐音量"
+        />
+        <span class="volume-value">{{ volumePercent }}</span>
+      </div>
+    </div>
 
     <audio
       ref="audioEl"
@@ -119,155 +130,246 @@ onBeforeUnmount(() => {
 .music-control {
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-left: 12px;
   padding-left: 12px;
-  border-left: 1px solid rgba(255, 0, 128, 0.15);
-  height: 28px;
+  border-left: 1px solid rgba(249, 212, 108, 0.16);
+  height: 32px;
   transition: border-color 0.3s;
+}
+
+.music-shell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 3px 8px 3px 4px;
+  border: 1px solid rgba(235, 92, 32, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(249, 212, 108, 0.16), rgba(235, 92, 32, 0.08)),
+    rgba(255, 255, 255, 0.72);
+  box-shadow: 0 6px 18px rgba(73, 45, 34, 0.08);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.dark .music-shell {
+  border-color: rgba(249, 212, 108, 0.22);
+  background:
+    linear-gradient(135deg, rgba(249, 212, 108, 0.12), rgba(235, 92, 32, 0.12)),
+    rgba(11, 12, 21, 0.78);
+  box-shadow: 0 6px 18px rgba(13, 58, 105, 0.22);
+}
+
+.music-shell:hover,
+.music-shell:focus-within {
+  border-color: rgba(235, 92, 32, 0.42);
+  box-shadow: 0 8px 22px rgba(235, 92, 32, 0.16);
 }
 
 .music-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 999px;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ssmt-hermes), var(--ssmt-china-red));
+  color: #fff;
   cursor: pointer;
-  color: var(--vp-c-text-1);
-  padding: 4px 10px;
-  font-size: 12px;
-  line-height: 1;
-  letter-spacing: 0.2px;
-  transition: all 0.25s ease;
-}
-
-.dark .music-toggle {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 3px 10px rgba(200, 22, 29, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .music-toggle:hover {
-  background: rgba(255, 0, 128, 0.1) !important;
-  border-color: rgba(255, 0, 128, 0.3) !important;
-  color: #ff0080 !important;
-  transform: translateY(-1px) scale(1.03);
-  box-shadow: 0 2px 8px rgba(255, 0, 128, 0.15);
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 5px 14px rgba(200, 22, 29, 0.32);
 }
 
-.dark .music-toggle:hover {
-  background: rgba(255, 0, 128, 0.15) !important;
+.music-toggle:focus-visible {
+  outline: 2px solid var(--ssmt-schonbrunn);
+  outline-offset: 2px;
+}
+
+.play-mark {
+  display: block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid currentColor;
+}
+
+.play-mark.pause {
+  width: 8px;
+  height: 10px;
+  margin-left: 0;
+  border-top: 0;
+  border-bottom: 0;
+  border-left: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+
+.music-meta {
+  display: grid;
+  gap: 1px;
+  min-width: 31px;
+  line-height: 1;
 }
 
 .label {
-  display: inline-block;
-  font-weight: 600;
-  transition: color 0.25s;
-}
-
-.music-toggle:hover .label {
-  color: #ff0080;
-}
-
-.icon {
-  width: 10px;
-  text-align: center;
+  color: var(--vp-c-text-1);
   font-size: 11px;
-  transition: transform 0.3s;
+  font-weight: 700;
+  letter-spacing: 0.4px;
 }
 
-.music-toggle:hover .icon {
-  transform: scale(1.2);
+.status {
+  color: var(--ssmt-danger);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
 }
 
-/* ---- 自定义音量滑块 ---- */
+.status.on {
+  color: var(--ssmt-success);
+}
+
+.music-control.blocked .status {
+  color: var(--ssmt-warning);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(73, 45, 34, 0.12);
+}
+
+.dark .volume-control {
+  border-left-color: rgba(249, 212, 108, 0.14);
+}
+
+.volume-mark {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  color: var(--ssmt-van-dyke);
+}
+
+.dark .volume-mark {
+  color: var(--ssmt-schonbrunn);
+}
+
+.volume-mark::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.volume-mark::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  width: 6px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.volume-value {
+  width: 27px;
+  color: var(--ssmt-van-dyke);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: right;
+}
+
+.dark .volume-value {
+  color: var(--ssmt-schonbrunn);
+}
+
 .volume-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 80px;
+  width: 72px;
   height: 4px;
-  border-radius: 2px;
-  background: rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ssmt-hermes), var(--ssmt-schonbrunn));
   cursor: pointer;
   outline: none;
-  transition: background 0.3s;
+  opacity: 0.86;
+  transition: opacity 0.2s ease;
 }
 
-.dark .volume-slider {
-  background: rgba(255, 255, 255, 0.1);
+.volume-slider:hover,
+.volume-slider:focus-visible {
+  opacity: 1;
 }
 
-.volume-slider:hover {
-  background: rgba(255, 0, 128, 0.15);
-}
-
-.dark .volume-slider:hover {
-  background: rgba(255, 0, 128, 0.2);
-}
-
-/* 滑块轨道 - WebKit */
 .volume-slider::-webkit-slider-runnable-track {
   height: 4px;
-  border-radius: 2px;
+  border-radius: 999px;
   background: transparent;
 }
 
-/* 滑块拇指 - WebKit */
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ff0080;
+  width: 13px;
+  height: 13px;
+  margin-top: -4.5px;
   border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(255, 0, 128, 0.4);
+  border-radius: 50%;
+  background: var(--ssmt-schonbrunn);
+  box-shadow: 0 1px 5px rgba(73, 45, 34, 0.35);
   cursor: pointer;
-  margin-top: -5px;
-  transition: all 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .volume-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(255, 0, 128, 0.6);
+  transform: scale(1.14);
+  box-shadow: 0 0 10px rgba(235, 92, 32, 0.46);
 }
 
 .dark .volume-slider::-webkit-slider-thumb {
-  border-color: #1a1a2e;
-  box-shadow: 0 1px 4px rgba(255, 0, 128, 0.6);
+  border-color: var(--ssmt-van-dyke);
 }
 
-/* 滑块轨道 - Firefox */
 .volume-slider::-moz-range-track {
   height: 4px;
-  border-radius: 2px;
-  background: transparent;
-  border: none;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ssmt-hermes), var(--ssmt-schonbrunn));
 }
 
-/* 滑块拇指 - Firefox */
 .volume-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ff0080;
+  width: 11px;
+  height: 11px;
   border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(255, 0, 128, 0.4);
+  border-radius: 50%;
+  background: var(--ssmt-schonbrunn);
+  box-shadow: 0 1px 5px rgba(73, 45, 34, 0.35);
   cursor: pointer;
 }
 
 .dark .volume-slider::-moz-range-thumb {
-  border-color: #1a1a2e;
+  border-color: var(--ssmt-van-dyke);
 }
 
-.music-control.blocked .music-toggle {
-  border-color: rgba(245, 158, 11, 0.4) !important;
-}
-
-.music-control.blocked .music-toggle:hover {
-  border-color: rgba(245, 158, 11, 0.6) !important;
-  color: #f59e0b !important;
+.music-control.blocked .music-shell {
+  border-color: rgba(200, 22, 29, 0.45);
+  box-shadow: 0 6px 18px rgba(200, 22, 29, 0.16);
 }
 
 audio {

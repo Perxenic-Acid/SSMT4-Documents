@@ -15,9 +15,6 @@ export default defineConfig({
   themeConfig: {
     nav,
     sidebar,
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/StarBobis/SSMT4-Alpha' }
-    ],
     search: {
       provider: 'local'
     }

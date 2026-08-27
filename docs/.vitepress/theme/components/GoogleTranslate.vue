@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onBeforeUnmount, onMounted, ref, computed } from 'vue'
 
 const showDropdown = ref(false)
 const currentLang = ref('zh-CN')
+let observer: MutationObserver | null = null
+let scriptEl: HTMLScriptElement | null = null
 
 const languages = [
   { code: 'zh-CN', label: '简体中文' },
@@ -80,15 +82,20 @@ onMounted(() => {
     )
   }
 
-  const script = document.createElement('script')
-  script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
-  script.async = true
-  document.body.appendChild(script)
+  const existingScript = document.querySelector<HTMLScriptElement>('script[src*="translate_a/element.js"]')
+  if (existingScript) {
+    scriptEl = existingScript
+  } else {
+    scriptEl = document.createElement('script')
+    scriptEl.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    scriptEl.async = true
+    document.body.appendChild(scriptEl)
+  }
 
   // ---------------------------------------------------------
   // 强力去广告/去横幅逻辑
   // ---------------------------------------------------------
-  const observer = new MutationObserver(() => {
+  observer = new MutationObserver(() => {
     // 1. 移除顶部横幅 iframe
     const banner = document.querySelector('.goog-te-banner-frame')
     if (banner) {
@@ -112,6 +119,12 @@ onMounted(() => {
     attributes: true, 
     attributeFilter: ['style', 'class'] 
   })
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+  observer?.disconnect()
+  observer = null
 })
 </script>
 
@@ -179,14 +192,14 @@ onMounted(() => {
 
 .translate-btn:hover,
 .translate-btn.active {
-  background-color: rgba(255, 0, 128, 0.08);
-  border-color: rgba(255, 0, 128, 0.2);
+  background-color: rgba(249, 212, 108, 0.1);
+  border-color: rgba(235, 92, 32, 0.22);
 }
 
 .dark .translate-btn:hover,
 .dark .translate-btn.active {
-  background-color: rgba(255, 0, 128, 0.12);
-  border-color: rgba(255, 0, 128, 0.25);
+  background-color: rgba(235, 92, 32, 0.14);
+  border-color: rgba(249, 212, 108, 0.26);
 }
 
 .translate-icon {
@@ -197,7 +210,7 @@ onMounted(() => {
 
 .translate-btn:hover .translate-icon,
 .translate-btn.active .translate-icon {
-  color: #ff0080;
+  color: var(--ssmt-hermes);
   transform: rotate(-8deg) scale(1.1);
 }
 
@@ -209,7 +222,7 @@ onMounted(() => {
 
 .translate-btn:hover .selected-text,
 .translate-btn.active .selected-text {
-  color: #ff0080;
+  color: var(--ssmt-burgundy);
 }
 
 .chevron-icon {
@@ -224,7 +237,7 @@ onMounted(() => {
 
 .translate-btn:hover .chevron-icon,
 .translate-btn.active .chevron-icon {
-  color: #ff0080;
+  color: var(--ssmt-hermes);
 }
 
 /* ---- 自定义下拉菜单 ---- */
@@ -236,19 +249,19 @@ onMounted(() => {
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 0, 128, 0.2);
+  border: 1px solid rgba(235, 92, 32, 0.22);
   border-radius: 10px;
   padding: 5px;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.06),
-    0 12px 36px rgba(255, 0, 128, 0.1);
+    0 12px 36px rgba(73, 45, 34, 0.1);
   z-index: 100;
   overflow: hidden;
 }
 
 .dark .translate-dropdown {
   background-color: rgba(11, 12, 21, 0.7);
-  border-color: rgba(255, 0, 128, 0.3);
+  border-color: rgba(249, 212, 108, 0.28);
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.2),
     0 12px 36px rgba(0, 0, 0, 0.3);
@@ -272,17 +285,17 @@ onMounted(() => {
 }
 
 .dropdown-item:hover {
-  background-color: rgba(255, 0, 128, 0.1);
-  color: #ff0080;
+  background-color: rgba(249, 212, 108, 0.14);
+  color: var(--ssmt-burgundy);
   padding-left: 16px;
 }
 
 .dark .dropdown-item:hover {
-  background-color: rgba(255, 0, 128, 0.15);
+  background-color: rgba(235, 92, 32, 0.16);
 }
 
 .dropdown-item.active {
-  color: #ff0080;
+  color: var(--ssmt-hermes);
   font-weight: 600;
 }
 

@@ -1,41 +1,41 @@
 # 🎮 SSMT 支持哪些游戏？
 
-## 📝 概述
+SSMT 基于 **3Dmigoto** 工作，主要用于处理 3Dmigoto Dump 出来的文件，方便导入 Blender，并生成 3Dmigoto 格式的 Mod。
 
-SSMT 是基于 **3Dmigoto** 的，本质上是对 3Dmigoto Dump 下来的文件做后处理，以方便导入 Blender 并且生成为 3Dmigoto 格式的 Mod。
+因此，SSMT 的游戏支持范围主要取决于 3Dmigoto 是否支持该游戏。
 
-所以 SSMT 支持哪些游戏完全取决于 3Dmigoto 支持哪些游戏。
+> 💡 如果遇到问题，欢迎提交 issue 反馈。
 
-## ✅ 完全支持的游戏
+## ✅ 完全支持
 
-以下列表为 SSMT 已完全支持的游戏情况总结：
+- **崩坏三 (Honkai Impact 3)**
+- **原神 (Genshin Impact)**
+- **崩坏：星穹铁道 (Honkai Star Rail)**
+- **绝区零 (Zenless Zone Zero)**
+- **鸣潮 (Wuthering Waves)**
+- **明日方舟：终末地**
 
--   **崩坏三 (Honkai Impact 3)**
--   **原神 (Genshin Impact)**
--   **崩坏:星穹铁道 (Honkai StarRail)**
--   **绝区零 (Zenless Zone Zero)**
--   **鸣潮 (Wuthering Waves)**
--   **尘白禁区 (Snow Break)**
--   **卡拉比丘 (Strinova)**
--   **第五人格 (IdentityV)** 【包括 Neox2 和 Neox3 引擎都是完美支持】
--   **剑与远征:启程 (AFK J)**
--   **仁王2 (Nioh 2)**
--   **死或生:沙滩排球 (DOA V)**
--   **Shadowverse: Worlds Beyond**
--   **嗜血印 (Bloody Spell)**
--   **下一站江湖2**
--   **少女前线2 (Girls Frontline2)** 【支持任何使用 Unity CPU-PreSkinning 的游戏，同理比如战双帕弥什、虚空之眼等等】
--   **MuMu 模拟器 / 蓝叠模拟器 DX11 模式** 【99% 都是 CPU-PreSkinning，如果有 GPU-PreSkinning 大概率存在端游，且每个游戏都要单独写脚本，比较鸡肋】
+## 🧩 部分支持
 
-## ⚠️ 部分支持或仍在测试中的游戏
+- **异环**
+- **尘白禁区 (Snowbreak)**
+- **卡拉比丘 (Strinova)**
+- **第五人格 (Identity V)**：支持 NeoX2 和 NeoX3 引擎
+- **剑与远征：启程 (AFK Journey)**
+- **仁王 2 (Nioh 2)**
+- **死或生：沙滩排球 (DOA Xtreme Venus Vacation)**
+- **Shadowverse: Worlds Beyond**
+- **嗜血印 (Bloody Spell)**
+- **下一站江湖 2**
+- **少女前线 2 (Girls' Frontline 2)**：也适用于部分使用 Unity CPU-PreSkinning 的游戏
+- **MuMu / 蓝叠模拟器 DX11 模式**：通常适用于 CPU-PreSkinning 场景；GPU-PreSkinning 游戏需要单独适配
 
--   **异人之下**
--   **解限机 (MechaBreak)**
--   **燕云十六声**
+## ⚠️ 测试中
 
-> 💡 **提示**：有问题请提交 issue 进行反馈。
+- **异人之下**
+- **蓝色星原**
 
-## 🔧 仅在专业技术支持中提供的游戏
+## 🔧 专业技术支持
 
--   **永劫无间 (Naraka Bladepoint)**
--   **永劫无间手游 (Naraka Bladepoint Mobile)**
+- **永劫无间 (Naraka: Bladepoint)**
+- **永劫无间手游 (Naraka: Bladepoint Mobile)**

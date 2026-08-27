@@ -7,7 +7,6 @@ import './custom.css'
 import EffectSwitch from './components/EffectSwitch.vue'
 import GoogleTranslate from './components/GoogleTranslate.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
-import RotatePrompt from './components/RotatePrompt.vue'
 import { h, ref } from 'vue'
 
 import DarkWatcher from "../components/DarkWatcher.vue";
@@ -18,7 +17,6 @@ export default {
 
     Layout() {
         return h(DefaultTheme.Layout, null, {
-            'layout-top': () => h(RotatePrompt),
             'nav-bar-content-after': () => [h(EffectSwitch), h(MusicPlayer), h(GoogleTranslate)]
         })
     },

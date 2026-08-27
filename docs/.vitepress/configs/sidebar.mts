@@ -9,17 +9,13 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         { text: 'SSMT介绍', link: '/newbie/ssmt/Index/Index' },
         { text: 'SSMT支持哪些游戏', link: '/newbie/ssmt/SSMTSupportedGames/SSMTSupportedGames' },
         { text: '下载与安装', link: '/newbie/ssmt/DownloadAndInstall/DownloadAndInstall' },
-        { text: 'SSMT版本更新指南', link: '/newbie/ssmt/SSMTVersionUpdate/SSMTVersionUpdate' },
-        { text: 'SSMT主页配置指南', link: '/newbie/ssmt/HomePageConfig/HomePageConfig' },
         { text: '如何创建新游戏配置', link: '/newbie/ssmt/HowToCreateNewConfig/HowToCreateNewConfig' },
         { text: '开始游戏前的配置', link: '/newbie/ssmt/ConfigBeforeStartGame/ConfigBeforeStartGame' },
-        { text: '3Dmigoto注入游戏指南', link: '/newbie/ssmt/Inject3DmigotoIntoGame/Inject3DmigotoIntoGame' },
-        { text: 'SSMT运行日志指南', link: '/newbie/ssmt/SSMTRunLogFile/SSMTRunLogFile' },
+        { text: '什么是VSCheck', link: '/newbie/ssmt/WhatIsVSCheck/WhatIsVSCheck' },
         //CantUse3DmigotoInjector
         { text: '无法使用3Dmigoto注入器?', link: '/newbie/ssmt/CantUse3DmigotoInjector/CantUse3DmigotoInjector' },
         //无法注入3Dmigoto
         { text: '无法注入3Dmigoto?', link: '/newbie/ssmt/CantInject3Dmigoto/CantInject3Dmigoto' },
-        { text: '无法打开LOD.exe', link: '/newbie/ssmt/CantOpenLODExe/CantOpenLODExe' },
         { text: '找不到数据类型', link: '/newbie/ssmt/CantFindDataType/CantFindDataType' },
         { text: '提取模型有多个数据类型', link: '/newbie/ssmt/ExtractMultipleGameType/ExtractMultipleGameType' },
         { text: 'Dump文件过大处理', link: '/newbie/ssmt/DumpFileTooHuge/DumpFileTooHuge' },
@@ -28,34 +24,12 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
   ],
   '/newbie/reverse/': [
     {
-      text: 'Mod自动逆向',
+      text: 'Mod模型一些小问题',
       items: [
-        { text: '自动逆向功能介绍', link: '/newbie/reverse/Introduction/Introduction' },
-        { text: '教程: 如何激活自动逆向', link: '/newbie/reverse/HowToActivateAutoReverse/HowToActivateAutoReverse' },
-        //{ text: '教程: 如何正确选择一键逆向选项', link: '/newbie/reverse/T003HowToUseAutoReverse/HowToChooseAutoReverseSelection' },
-        { text: '教程: 一键逆向后导入 Blender', link: '/newbie/reverse/T004ImportIntoBlender/T004ImportIntoBlender' },
-        { text: '教程: 筛选正确的数据类型', link: '/newbie/reverse/T005UseCorrectDataType/T005UseCorrectDataType' },
-        { text: '教程: 手动逆向功能', link: '/newbie/reverse/ManualReverse/ManualReverse' },
-        
-        { text: '案例: 原神脸部Mod', link: '/newbie/reverse/GenshinFaceReverse/GenshinFaceReverse' },
-        //{ text: '案例: 跨IB渲染 Mod', link: '/newbie/reverse/CrossIBReverse/CrossIBReverse' },
-        { text: '案例: 使用TexFx插件的Mod', link: '/newbie/reverse/Case_DrawWithTexFx/Case_DrawWithTexFx' },
-        { text: '案例: Buffer 膨胀混淆技术', link: '/newbie/reverse/BufferInflationObfuscation/BufferInflationObfuscation' },
-        { text: '案例: ResourceVBList.size() 为 4 的 Mod', link: '/newbie/reverse/ResourceVBListSize4/ResourceVBListSize4' },
-        { text: '案例: NPC Mod', link: '/newbie/reverse/NPCModReverseIssue/NPCModReverseIssue' },
-        { text: '案例: 鸣潮 Mod', link: '/newbie/reverse/WuWaModReverseProblem/WuWaModReverseProblem' },
-
+        { text: '萌新常见问题', link: '/newbie/reverse/FAQ/FAQ' },
         { text: '骨骼: 模型绑定骨骼', link: '/newbie/reverse/BindModelToBone/BindModelToBone' },
         { text: '骨骼: 米游游戏原骨骼绑骨', link: '/newbie/reverse/HoyoGamesBone/HoyoGamesBone' },
         { text: '骨骼: 鸣潮原骨骼绑骨', link: '/newbie/reverse/WutheringWavesBone/WutheringWavesBone' },
-
-        { text: '萌新常见问题', link: '/newbie/reverse/FAQ/FAQ' },
-        { text: '其它常见问题', link: '/newbie/reverse/T006FAQ/T006FAQ' },
-
-        //WhyNoFaceModel
-        { text: 'Mod逆向后缺少脸部模型?', link: '/newbie/reverse/WhyNoFaceModel/WhyNoFaceModel' },
-
-
       ]
     }
   ],
@@ -66,7 +40,6 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         { text: 'Blender插件安装教程', link: '/newbie/theherta4/TheHerta3Installation/TheHerta3Installation' },
         { text: '蓝图架构', link: '/newbie/theherta4/BlueprintArchitecture/BlueprintArchitecture' },
         { text: '投影TEXCOORD2.xy', link: '/newbie/theherta4/ProjectTEXCOORD2/ProjectTEXCOORD2' },
-        { text: '删除骨骼约束', link: '/newbie/theherta4/RemoveBoneConstraints/RemoveBoneConstraints' },
         { text: '平滑法线存TEXCOORD1.xy', link: '/newbie/theherta4/SmoothNormalToTEXCOORD1/SmoothNormalToTEXCOORD1' },
         { text: '模型细分后权重问题', link: '/newbie/theherta4/SubdivisionWeightIssue/SubdivisionWeightIssue' },
         //SwitchAndToggle
@@ -119,6 +92,7 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
       ]
     }
   ],
+
   '/developer/rust/': [
     {
       text: 'Rust 学习笔记',
@@ -169,7 +143,6 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
       text: '原神',
       items: [
         { text: '基础信息', link: '/games/gimi/BaseInfo/BaseInfo' },
-        { text: '10612-4001修复方法', link: '/games/gimi/HowToSolveErrorCode/HowToSolveErrorCode' },
         { text: '颜色不匹配问题', link: '/games/gimi/ColorMismatch/ColorMismatch' },
         { text: '脸部隐藏问题', link: '/games/gimi/FaceHidingIssue/FaceHidingIssue' },
         { text: 'Mod扭曲或失效', link: '/games/gimi/ModDistortion/ModDistortion' },
@@ -321,6 +294,7 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         { text: 'MikuMikuDance插件', link: '/blender/MikuMikuDance/MikuMikuDance' },
         { text: 'MikuMikuRig插件', link: '/blender/MikuMikuRig/MikuMikuRig' },
         { text: '撤销次数一定要拉高', link: '/blender/MoreCtrlZSteps/MoreCtrlZSteps' },
+        { text: '删除骨骼约束', link: '/blender/RemoveBoneConstraints/RemoveBoneConstraints' },
         { text: '去掉启动时的卡片', link: '/blender/RemoveStartTips/RemoveStartTips' },
         { text: '恢复默认布局', link: '/blender/RestoreDefaultLayout/RestoreDefaultLayout' },
         { text: 'Screenshot Keys插件', link: '/blender/ScreenshotKeys/ScreenshotKeys' },
