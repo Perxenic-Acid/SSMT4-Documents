@@ -158,7 +158,9 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         { text: '槽位风格贴图问题', link: '/games/srmi/SlotStyleTextureProblem/SlotStyleTextureProblem' },
         { text: '匹诺康尼贴图问题', link: '/games/srmi/TextureSlotIssue/TextureSlotIssue' },
         { text: 'UV2解析', link: '/games/srmi/WhatIsUV2/WhatIsUV2' },
-        { text: '黄边问题修复', link: '/games/srmi/YellowOutlineFix/YellowOutlineFix' }
+        { text: '黄边问题修复', link: '/games/srmi/YellowOutlineFix/YellowOutlineFix' },
+        { text: '崩铁SP刃无法正常制作', link: '/games/srmi/RenBrokenDisappear/RenBrokenDisappear' }
+
       ]
     }
   ],
