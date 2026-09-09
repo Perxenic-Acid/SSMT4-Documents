@@ -9,10 +9,10 @@ hero:
   actions:
     - theme: alt
       text: SSMT4下载地址
-      link: https://github.com/StarBobis/SSMT4-Alpha
+      link: https://github.com/Perxenic-Acid/SSMT4
     - theme: alt
       text: SSMT的Blender插件TheHerta4下载地址
-      link: https://github.com/StarBobis/TheHerta4
+      link: https://github.com/Perxenic-Acid/TheHerta4
 
 features:
   - title: 简洁

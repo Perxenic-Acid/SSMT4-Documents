@@ -7,7 +7,7 @@
 
 ## 下载插件
 
-前往 [GitHub 仓库](https://github.com/StarBobis/TheHerta4)，下载 Release 中的最新插件压缩包。
+前往 [GitHub 仓库](https://github.com/Perxenic-Acid/TheHerta4)，下载 Release 中的最新插件压缩包。
 
 ![1752128274140](1752128274140.png)
 

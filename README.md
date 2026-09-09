@@ -1,6 +1,6 @@
 # SSMT4 配套文档
 
-访问地址: https://starbobis.github.io/SSMT4-Documents/
+访问地址: https://perxenic-acid.github.io/SSMT4-Documents/
 
 # 开始写文档
 

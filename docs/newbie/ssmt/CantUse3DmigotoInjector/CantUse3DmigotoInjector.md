@@ -41,7 +41,7 @@ SSMT4使用Run.exe来注入3Dmigoto到目标进程，它本身是基于原始3Dm
 
 SSMT的设计是专门为Mod作者优化过的，所以灵活性拉满，你可以自由选择搭配方式。
 
-另外，Run.exe这个注入器是开源的，源码就在：https://github.com/StarBobis/SSMT/tree/main/3Dmigoto-Injector-V2
+另外，Run.exe这个注入器是开源的，源码就在：https://github.com/Perxenic-Acid/SSMT-Native/tree/main/3Dmigoto-Injector-V2
 
 有条件可自行编译后，替换resources目录下原本的Run.exe来使用
 

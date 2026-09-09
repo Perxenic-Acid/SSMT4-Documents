@@ -3,7 +3,7 @@ SSMT可以在Github下载并安装：
 
 首先我们打开Github地址：
 
-https://github.com/StarBobis/SSMT4-Alpha
+https://github.com/Perxenic-Acid/SSMT4
 
 点击右下角的Releases：
 
