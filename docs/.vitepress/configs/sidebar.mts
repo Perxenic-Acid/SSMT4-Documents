@@ -147,6 +147,7 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
         { text: '脸部隐藏问题', link: '/games/gimi/FaceHidingIssue/FaceHidingIssue' },
         { text: 'Mod扭曲或失效', link: '/games/gimi/ModDistortion/ModDistortion' },
         { text: 'Mod边缘剧烈抖动', link: '/games/gimi/ModIsShaking/ModIsShaking' },
+        { text: '保留实例化 Draw 语义', link: '/games/gimi/PreserveDrawType/PreserveDrawType' },
         { text: 'OR Fix与NN Fix', link: '/games/gimi/ORFixAndNNFix/ORFixAndNNFix' },
         { text: '轮廓线修复', link: '/games/gimi/OutlineFix/OutlineFix' },
       ]
